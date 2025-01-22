@@ -10,6 +10,7 @@ class Game {
     this.setupControls();
     this.setupEventListeners();
     this.gameLoop();
+    this.controls.isLocked = false; // Add initial lock state
   }
 
   initScene() {
@@ -88,9 +89,20 @@ class Game {
     this.controls = new PointerLockControls(this.camera, document.body);
     this.moveState = { forward: 0, right: 0 };
     this.velocity = new THREE.Vector3();
-    
-    document.addEventListener('click', () => {
-      this.controls.lock();
+
+    const togglePointerLock = () => {
+      if (this.controls.isLocked) {
+        this.controls.unlock();
+      } else {
+        this.controls.lock().catch(err => {
+          console.log('Pointer lock failed:', err);
+        });
+      }
+    };
+
+    document.addEventListener('click', togglePointerLock);
+    document.addEventListener('pointerlockchange', () => {
+      this.controls.isLocked = document.pointerLockElement === document.body;
     });
 
     document.addEventListener('keydown', e => this.onKey(e, true));
