@@ -87,15 +87,14 @@ class Game {
 
   setupControls() {
     this.controls = new PointerLockControls(this.camera, document.body);
-    this.moveState = { forward: 0, right: 0 };
-    this.velocity = new THREE.Vector3();
+    const controls = this.controls; // Local reference for event listeners
 
     const togglePointerLock = () => {
-      if (!this.controls) return; // Safety check
-      if (this.controls.isLocked) {
-        this.controls.unlock();
+      if (!controls) return;
+      if (controls.isLocked) {
+        controls.unlock();
       } else {
-        this.controls.lock().catch(err => {
+        controls.lock().catch(err => {
           console.log('Pointer lock failed:', err);
         });
       }
@@ -103,10 +102,11 @@ class Game {
 
     document.addEventListener('click', togglePointerLock);
     document.addEventListener('pointerlockchange', () => {
-      if (this.controls) { // Add null check
-        this.controls.isLocked = document.pointerLockElement === document.body;
-      }
+      controls.isLocked = document.pointerLockElement === document.body;
     });
+
+    this.moveState = { forward: 0, right: 0 };
+    this.velocity = new THREE.Vector3();
 
     document.addEventListener('keydown', e => this.onKey(e, true));
     document.addEventListener('keyup', e => this.onKey(e, false));
