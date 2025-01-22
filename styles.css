@@ -1,0 +1,51 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Arial', sans-serif;
+}
+
+canvas {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}
+
+#hud {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.health-bar, .mana-bar {
+  margin: 10px 0;
+  position: relative;
+  width: 200px;
+  height: 30px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  width: 100%;
+  transition: width 0.3s ease;
+}
+
+.health-bar .bar {
+  background: #ff3366;
+}
+
+.mana-bar .bar {
+  background: #3366ff;
+}
+
+span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: lighten;
+}
