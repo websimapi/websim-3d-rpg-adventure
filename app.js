@@ -71,12 +71,12 @@ class Game {
     const treeGeometry = new THREE.CylinderGeometry(0.3, 0.5, 2);
     const treeMaterial = new THREE.MeshPhongMaterial({ color: 0x4a3520 });
     
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 200; i++) {
       const x = (Math.random() - 0.5) * TERRAIN_SIZE;
       const z = (Math.random() - 0.5) * TERRAIN_SIZE;
       const y = this.getTerrainHeight(x, z);
       
-      if (y > 3 && noise.noise2D(x * 0.1, z * 0.1) > 0.3) {
+      if (y > 3 && noise.noise2D(x * 0.1, z * 0.1) > 0.2) {
         const tree = this.createTree(x, y, z);
         this.scene.add(tree);
       }
@@ -109,8 +109,9 @@ class Game {
     this.terrain.worldToLocal(position);
     const vertices = this.terrain.geometry.attributes.position.array;
     
-    const closestIndex = Math.round((position.x + TERRAIN_SIZE/2) / TERRAIN_SIZE * TERRAIN_DETAIL) * (TERRAIN_DETAIL + 1) +
-                        Math.round((position.z + TERRAIN_SIZE/2) / TERRAIN_SIZE * TERRAIN_DETAIL);
+    const gridX = Math.round((position.x + TERRAIN_SIZE/2) / TERRAIN_SIZE * TERRAIN_DETAIL);
+    const gridZ = Math.round((position.z + TERRAIN_SIZE/2) / TERRAIN_SIZE * TERRAIN_DETAIL);
+    const closestIndex = gridX * (TERRAIN_DETAIL + 1) + gridZ;
     
     return vertices[closestIndex * 3 + 1];
   }
@@ -133,14 +134,13 @@ class Game {
 
   setupControls() {
     this.controls = new PointerLockControls(this.camera, document.body);
-    const controls = this.controls; // Local reference for event listeners
-
+    
     const togglePointerLock = () => {
-      if (!controls) return;
-      if (controls.isLocked) {
-        controls.unlock();
+      if (!this.controls) return;
+      if (this.controls.isLocked) {
+        this.controls.unlock();
       } else {
-        controls.lock().catch(err => {
+        this.controls.lock().catch(err => {
           console.log('Pointer lock failed:', err);
         });
       }
@@ -148,7 +148,7 @@ class Game {
 
     document.addEventListener('click', togglePointerLock);
     document.addEventListener('pointerlockchange', () => {
-      controls.isLocked = document.pointerLockElement === document.body;
+      this.controls.isLocked = document.pointerLockElement === document.body;
     });
 
     this.moveState = { forward: 0, right: 0 };
