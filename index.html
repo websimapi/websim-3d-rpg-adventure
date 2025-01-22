@@ -18,14 +18,24 @@
 <body>
   <div id="hud">
     <div class="health-bar">
-      <div class="bar"></div>
-      <span>❤️ 100</span>
+      <div class="bar" style="width: 100%"></div>
+      <span>❤️ <span id="health-value">100</span></span>
     </div>
     <div class="mana-bar">
-      <div class="bar"></div>
-      <span>🔮 100</span>
+      <div class="bar" style="width: 100%"></div>
+      <span>🔮 <span id="mana-value">100</span></span>
     </div>
   </div>
+  
+  <div id="crosshair">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 2L12 8M12 16L12 22M4 12L8 12M16 12L22 12" 
+            stroke="white" 
+            stroke-width="2"
+            stroke-linecap="round"/>
+    </svg>
+  </div>
+  
   <script type="module" src="app.js"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
