@@ -91,6 +91,7 @@ class Game {
     this.velocity = new THREE.Vector3();
 
     const togglePointerLock = () => {
+      if (!this.controls) return; // Safety check
       if (this.controls.isLocked) {
         this.controls.unlock();
       } else {
@@ -102,7 +103,9 @@ class Game {
 
     document.addEventListener('click', togglePointerLock);
     document.addEventListener('pointerlockchange', () => {
-      this.controls.isLocked = document.pointerLockElement === document.body;
+      if (this.controls) { // Add null check
+        this.controls.isLocked = document.pointerLockElement === document.body;
+      }
     });
 
     document.addEventListener('keydown', e => this.onKey(e, true));
