@@ -29,9 +29,12 @@ class Game {
     const noise = new SimplexNoise();
     const terrainGeometry = new THREE.PlaneGeometry(200, 200, 50, 50);
     
-    terrainGeometry.vertices.forEach(vertex => {
-      vertex.y = noise.noise2D(vertex.x * 0.1, vertex.z * 0.1) * 5;
-    });
+    // Updated vertex manipulation for newer Three.js versions
+    const positions = terrainGeometry.attributes.position.array;
+    for (let i = 0; i < positions.length; i += 3) {
+      positions[i + 1] = noise.noise2D(positions[i] * 0.1, positions[i + 2] * 0.1) * 5;
+    }
+    terrainGeometry.computeVertexNormals(); // Needed for proper lighting
     
     const terrainMaterial = new THREE.MeshPhongMaterial({
       color: 0x88ff88,
@@ -138,7 +141,7 @@ class Game {
       requestAnimationFrame(animate);
       const delta = clock.getDelta();
       this.updatePlayer(delta);
-      this.renderer.render(this.scene, this.player.object);
+      this.renderer.render(this.scene, this.camera);
     };
     animate();
   }
